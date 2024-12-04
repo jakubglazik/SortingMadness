@@ -1,6 +1,7 @@
-package pl.put.poznan.transformer.logic;
+package pl.put.poznan.sortingMadness.logic;
 
 public interface Sorting {
     public void getInput();
     public void sort();
+
 }
