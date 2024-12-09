@@ -1,19 +1,59 @@
 package pl.put.poznan.sortingMadness.rest;
 
 import org.springframework.web.bind.annotation.*;
-import java.util.Collections;
+import pl.put.poznan.sortingMadness.logic.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/sort")
 public class SortController {
+    private SortingInterface sorter;
 
+    // Method to set the sorter based on the algorithm name
+    public void setSorter(String name) {
+        switch (name) {
+            case "BubbleSort":
+                this.sorter = new BubbleSort();
+                break;
+            case "HeapSort":
+                this.sorter = new HeapSort();
+                break;
+            case "InsertionSort":
+                this.sorter = new InsertionSort();
+                break;
+            case "MergeSort":
+                this.sorter = new MergeSort();
+                break;
+            case "QuickSort":
+                this.sorter = new QuickSort();
+                break;
+            case "SelectionSort":
+                this.sorter = new SelectionSort();
+                break;
+            default:
+                throw new IllegalArgumentException("No such sorting algorithm available: " + name);
+        }
+    }
+    @SuppressWarnings("unchecked")
     @PostMapping
-    public List<Integer> Sort(@RequestBody SortRequest request) {
-        List<Integer> data = request.getData();
+    public List<Object> sort(@RequestBody SortRequest request) {
+        List<Object> rawData = request.getData();
+        boolean descending = request.isDescending();
 
-        data.sort(Integer::compareTo);
+        List comparableData = new ArrayList();
+        for (Object obj : rawData) {
+            if (!(obj instanceof Comparable)) {
+                throw new IllegalArgumentException("Data contains non-comparable elements: " + obj);
+            }
+            comparableData.add(obj);
+        }
 
-        return data;
+        setSorter(request.getAlgorithmName());
+
+        ArrayList sortedData = sorter.sort(new ArrayList<>(comparableData), descending);
+
+        return new ArrayList<>(sortedData);
     }
 }
