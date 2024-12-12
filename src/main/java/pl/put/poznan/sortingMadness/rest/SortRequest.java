@@ -6,6 +6,7 @@ public class SortRequest {
     private List<Object> data; // Accepts raw objects
     private String algorithmName;
     private boolean descending;
+    private String fieldName;
 
     public List<Object> getData() {
         return data;
@@ -29,5 +30,13 @@ public class SortRequest {
 
     public void setDescending(boolean descending) {
         this.descending = descending;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 }
