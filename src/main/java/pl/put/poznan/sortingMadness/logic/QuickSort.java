@@ -1,5 +1,8 @@
 package pl.put.poznan.sortingMadness.logic;
 import java.util.ArrayList;
+import java.util.Comparator;
+
+
 public class QuickSort implements SortingInterface {
     private String name;
 
@@ -18,25 +21,25 @@ public class QuickSort implements SortingInterface {
     }
 
     @Override
-    public <T extends Comparable<T>> ArrayList<T> sort(ArrayList<T> data, boolean descOrder) {
-        quickSort(data, 0, data.size() - 1, descOrder);
+    public <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+        quickSort(data, 0, data.size() - 1, comparator,descOrder);
         return data;
     }
 
-    private <T extends Comparable<T>> void quickSort(ArrayList<T> data, int low, int high, boolean descOrder) {
+    private <T> void quickSort(ArrayList<T> data, int low, int high,Comparator<? super T> comperator ,boolean descOrder) {
         if (low < high) {
-            int pivotIndex = partition(data, low, high, descOrder);
-            quickSort(data, low, pivotIndex - 1, descOrder);
-            quickSort(data, pivotIndex + 1, high, descOrder);
+            int pivotIndex = partition(data, low, high, comperator ,descOrder);
+            quickSort(data, low, pivotIndex - 1, comperator,descOrder);
+            quickSort(data, pivotIndex + 1, high, comperator,descOrder);
         }
     }
 
-    private <T extends Comparable<T>> int partition(ArrayList<T> data, int low, int high, boolean descOrder) {
+    private <T> int partition(ArrayList<T> data, int low, int high, Comparator<? super T> comperator, boolean descOrder) {
         T pivot = data.get(high);
         int i = low - 1;
 
         for (int j = low; j < high; j++) {
-            int comparison = data.get(j).compareTo(pivot);
+            int comparison = comperator.compare(data.get(j), pivot);
             if ((descOrder && comparison > 0) || (!descOrder && comparison <= 0)) {
                 i++;
                 swap(data, i, j);

@@ -1,5 +1,8 @@
 package pl.put.poznan.sortingMadness.logic;
 import java.util.ArrayList;
+import java.util.Comparator;
+
+
 public class MergeSort implements SortingInterface {
     private String name;
 
@@ -18,7 +21,7 @@ public class MergeSort implements SortingInterface {
     }
 
     @Override
-    public <T extends Comparable<T>> ArrayList<T> sort(ArrayList<T> data, boolean descOrder) {
+    public <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
         if (data.size() <= 1) {
             return data;
         }
@@ -27,17 +30,17 @@ public class MergeSort implements SortingInterface {
         ArrayList<T> left = new ArrayList<>(data.subList(0, mid));
         ArrayList<T> right = new ArrayList<>(data.subList(mid, data.size()));
 
-        sort(left, descOrder);
-        sort(right, descOrder);
+        sort(left,comparator, descOrder);
+        sort(right,comparator, descOrder);
 
-        return merge(data, left, right, descOrder);
+        return merge(data, left, right,comparator, descOrder);
     }
 
-    private <T extends Comparable<T>> ArrayList<T> merge(ArrayList<T> data, ArrayList<T> left, ArrayList<T> right, boolean descOrder) {
+    private <T> ArrayList<T> merge(ArrayList<T> data, ArrayList<T> left, ArrayList<T> right, Comparator<? super T> comparator, boolean descOrder) {
         int i = 0, j = 0, k = 0;
 
         while (i < left.size() && j < right.size()) {
-            int comparison = left.get(i).compareTo(right.get(j));
+            int comparison = comparator.compare(left.get(i), right.get(j));
             if ((descOrder && comparison > 0) || (!descOrder && comparison <= 0)) {
                 data.set(k++, left.get(i++));
             } else {

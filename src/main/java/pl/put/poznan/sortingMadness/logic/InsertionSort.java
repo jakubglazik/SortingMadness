@@ -1,5 +1,8 @@
 package pl.put.poznan.sortingMadness.logic;
 import java.util.ArrayList;
+import java.util.Comparator;
+
+
 public class InsertionSort implements SortingInterface {
     private String name;
 
@@ -18,14 +21,14 @@ public class InsertionSort implements SortingInterface {
     }
 
     @Override
-    public <T extends Comparable<T>> ArrayList<T> sort(ArrayList<T> data, boolean descOrder) {
+    public <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
         int n = data.size();
         for (int i = 1; i < n; i++) {
             T key = data.get(i);
             int j = i - 1;
 
             while (j >= 0) {
-                int comparison = data.get(j).compareTo(key);
+                int comparison = comparator.compare(data.get(j),key);
                 if ((descOrder && comparison < 0) || (!descOrder && comparison > 0)) {
                     data.set(j + 1, data.get(j));
                     j--;
