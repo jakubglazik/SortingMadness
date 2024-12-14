@@ -1,7 +1,9 @@
 package pl.put.poznan.sortingMadness.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.put.poznan.sortingMadness.logic.*;
+import pl.put.poznan.sortingMadness.logic.SortingInterface;
+import pl.put.poznan.sortingMadness.logic.SortingStrategyFactory;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,33 +13,15 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/sort")
 public class SortController {
-    private SortingInterface sorter;
 
-    // Method to set the sorter based on the algorithm name
-    public void setSorter(String name) {
-        switch (name) {
-            case "BubbleSort":
-                this.sorter = new BubbleSort();
-                break;
-            case "HeapSort":
-                this.sorter = new HeapSort();
-                break;
-            case "InsertionSort":
-                this.sorter = new InsertionSort();
-                break;
-            case "MergeSort":
-                this.sorter = new MergeSort();
-                break;
-            case "QuickSort":
-                this.sorter = new QuickSort();
-                break;
-            case "SelectionSort":
-                this.sorter = new SelectionSort();
-                break;
-            default:
-                throw new IllegalArgumentException("No such sorting algorithm available: " + name);
-        }
+    private final SortingStrategyFactory strategyFactory;
+
+    // Dependency injection via constructor
+    @Autowired
+    public SortController(SortingStrategyFactory strategyFactory) {
+        this.strategyFactory = strategyFactory;
     }
+
     @SuppressWarnings("unchecked")
     @PostMapping
     public List<Object> sort(@RequestBody SortRequest request) {
@@ -49,17 +33,16 @@ public class SortController {
             return new ArrayList<>();
         }
 
-        setSorter(request.getAlgorithmName());
+        SortingInterface sorter = strategyFactory.getSorter(request.getAlgorithmName());
 
         if (fieldName != null && !fieldName.isEmpty()) {
-            return sortByField(rawData, fieldName, descending);
+            return sortByField(sorter, rawData, fieldName, descending);
         } else {
-            return sortByValue(rawData, descending);
+            return sortByValue(sorter, rawData, descending);
         }
     }
 
-
-    public List<Object> sortByValue(List<Object> rawData, boolean descending) {
+    private List<Object> sortByValue(SortingInterface sorter, List<Object> rawData, boolean descending) {
         if (rawData == null || rawData.isEmpty()) {
             return new ArrayList<>();
         }
@@ -73,13 +56,12 @@ public class SortController {
         return new ArrayList<>(sortedList);
     }
 
-
-    public List<Object> sortByField(List<Object> rawData, String fieldName, boolean descending) {
-        // Sprawdzenie i przekształcenie rawData do ArrayList<Map<String, Object>>
+    private List<Object> sortByField(SortingInterface sorter, List<Object> rawData, String fieldName, boolean descending) {
+        // Check and convert rawData to ArrayList<Map<String, Object>>
         ArrayList<Map<String, Object>> sortableList = new ArrayList<>();
         for (Object obj : rawData) {
             if (!(obj instanceof Map)) {
-                throw new IllegalArgumentException("Dane wejściowe zawierają elementy inne niż Map<String, Object>.");
+                throw new IllegalArgumentException("Input data contains elements that are not Map<String, Object>.");
             }
             sortableList.add((Map<String, Object>) obj);
         }
@@ -89,22 +71,22 @@ public class SortController {
             Object value2 = map2.get(fieldName);
 
             if (value1 == null || value2 == null) {
-                throw new IllegalArgumentException("Pole '" + fieldName + "' zawiera wartość null.");
+                throw new IllegalArgumentException("Field '" + fieldName + "' contains null values.");
             }
 
             if (!(value1 instanceof Comparable) || !(value2 instanceof Comparable)) {
-                throw new IllegalArgumentException("Pole '" + fieldName + "' nie implementuje interfejsu Comparable.");
+                throw new IllegalArgumentException("Field '" + fieldName + "' does not implement Comparable.");
             }
 
             return ((Comparable<Object>) value1).compareTo(value2);
         };
-        
+
         ArrayList<Map<String, Object>> sortedList = sorter.sort(sortableList, comparator, descending);
 
         return new ArrayList<>(sortedList);
     }
 
-    public static <T> Comparator<T> getComparator(List<T> data) {
+    private static <T> Comparator<T> getComparator(List<T> data) {
         if (data == null || data.isEmpty()) {
             throw new IllegalArgumentException("The data list is null or empty.");
         }
