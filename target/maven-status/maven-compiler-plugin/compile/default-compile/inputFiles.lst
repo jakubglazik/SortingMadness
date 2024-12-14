@@ -1,3 +1,12 @@
-/Users/mateuszpuk/IdeaProjects/SortingMadness/src/main/java/pl/put/poznan/transformer/app/TextTransformerApplication.java
-/Users/mateuszpuk/IdeaProjects/SortingMadness/src/main/java/pl/put/poznan/transformer/logic/TextTransformer.java
-/Users/mateuszpuk/IdeaProjects/SortingMadness/src/main/java/pl/put/poznan/transformer/rest/TextTransformerController.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\rest\SortController.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\logic\SelectionSort.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\app\SortingMadness.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\logic\HeapSort.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\logic\InsertionSort.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\logic\BubbleSort.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\logic\MergeSort.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\logic\QuickSort.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\logic\SortingInterface.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\logic\SortingStrategyFactory.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\logic\SortResult.java
+C:\Users\bartl\IdeaProjects\SortingMadness\src\main\java\pl\put\poznan\sortingMadness\rest\SortRequest.java
