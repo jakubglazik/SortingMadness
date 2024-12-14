@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>pl.put.poznan</groupId>
-    <artifactId>io-project-architecture</artifactId>
+    <artifactId>SortingMadness</artifactId>
     <version>0.1</version>
 
     <properties>
