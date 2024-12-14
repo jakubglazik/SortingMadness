@@ -19,11 +19,4 @@ public class SortResult<T> {
         return executionTime;
     }
 
-    @Override
-    public String toString() {
-        return "SortResult{" +
-                "sortedData=" + sortedData +
-                ", executionTime=" + executionTime +
-                " nanoseconds}";
-    }
 }
