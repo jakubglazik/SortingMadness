@@ -7,5 +7,5 @@ public interface SortingInterface {
     String getName();
     void setName(String name);
     //<T extends Comparable<T>> ArrayList<T> sort(ArrayList<T> data, boolean descOrder);
-    <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder);
+    <T> SortResult<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder);
 }

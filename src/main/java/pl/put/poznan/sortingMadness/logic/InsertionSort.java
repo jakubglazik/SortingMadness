@@ -21,7 +21,8 @@ public class InsertionSort implements SortingInterface {
     }
 
     @Override
-    public <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+    public <T> SortResult<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+        long startTime = System.nanoTime();
         int n = data.size();
         for (int i = 1; i < n; i++) {
             T key = data.get(i);
@@ -38,6 +39,8 @@ public class InsertionSort implements SortingInterface {
             }
             data.set(j + 1, key);
         }
-        return data;
-    }
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+
+        return new SortResult<>(data, duration);    }
 }

@@ -21,7 +21,8 @@ public class HeapSort implements SortingInterface {
         this.name = name;
     }
 
-    public <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+    public <T> SortResult<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+        long startTime = System.nanoTime();
         int n = data.size();
 
         // Budowanie kopca
@@ -35,7 +36,9 @@ public class HeapSort implements SortingInterface {
             heapify(data, i, 0, comparator, descOrder);
         }
 
-        return data;
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        return new SortResult<>(data, duration);
     }
 
     private <T> void heapify(ArrayList<T> data, int n, int i, Comparator<? super T> comparator, boolean descOrder) {

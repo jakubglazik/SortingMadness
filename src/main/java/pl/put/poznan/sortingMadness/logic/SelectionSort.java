@@ -21,12 +21,13 @@ public class SelectionSort implements SortingInterface{
     }
 
     @Override
-    public <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comperator, boolean descOrder) {
+    public <T> SortResult<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+        long startTime = System.nanoTime();
         int n = data.size();
         for (int i = 0; i < n - 1; i++) {
             int selectedIdx = i;
             for (int j = i + 1; j < n; j++) {
-                int comparison = comperator.compare(data.get(j), data.get(selectedIdx));
+                int comparison = comparator.compare(data.get(j), data.get(selectedIdx));
                 if ((descOrder && comparison > 0) || (!descOrder && comparison < 0)) {
                     selectedIdx = j;
                 }
@@ -37,7 +38,11 @@ public class SelectionSort implements SortingInterface{
                 data.set(i, temp);
             }
         }
-        return data;
+        long endTime = System.nanoTime();
+
+        long duration = endTime - startTime;
+
+        return new SortResult<>(data, duration); // Zwróć wynik w obiekcie SortResult
     }
 }
 

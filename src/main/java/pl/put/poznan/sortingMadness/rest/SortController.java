@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.sortingMadness.logic.SortingInterface;
 import pl.put.poznan.sortingMadness.logic.SortingStrategyFactory;
+import pl.put.poznan.sortingMadness.logic.SortResult;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,21 +17,21 @@ public class SortController {
 
     private final SortingStrategyFactory strategyFactory;
 
-    // Dependency injection via constructor
     @Autowired
     public SortController(SortingStrategyFactory strategyFactory) {
         this.strategyFactory = strategyFactory;
     }
 
+
     @SuppressWarnings("unchecked")
     @PostMapping
-    public List<Object> sort(@RequestBody SortRequest request) {
+    public SortResult<Object> sort(@RequestBody SortRequest request) {
         List<Object> rawData = request.getData();
         boolean descending = request.isDescending();
         String fieldName = request.getFieldName();
 
         if (rawData.isEmpty()) {
-            return new ArrayList<>();
+            return new SortResult<>(new ArrayList<>(), 0L);
         }
 
         SortingInterface sorter = strategyFactory.getSorter(request.getAlgorithmName());
@@ -42,22 +43,15 @@ public class SortController {
         }
     }
 
-    private List<Object> sortByValue(SortingInterface sorter, List<Object> rawData, boolean descending) {
-        if (rawData == null || rawData.isEmpty()) {
-            return new ArrayList<>();
-        }
-
+    private SortResult<Object> sortByValue(SortingInterface sorter, List<Object> rawData, boolean descending) {
         Comparator<Object> comparator = getComparator(rawData);
 
         ArrayList<Object> sortableList = new ArrayList<>(rawData);
 
-        ArrayList<Object> sortedList = sorter.sort(sortableList, comparator, descending);
-
-        return new ArrayList<>(sortedList);
+        return sorter.sort(sortableList, comparator, descending);
     }
 
-    private List<Object> sortByField(SortingInterface sorter, List<Object> rawData, String fieldName, boolean descending) {
-        // Check and convert rawData to ArrayList<Map<String, Object>>
+    private SortResult<Object> sortByField(SortingInterface sorter, List<Object> rawData, String fieldName, boolean descending) {
         ArrayList<Map<String, Object>> sortableList = new ArrayList<>();
         for (Object obj : rawData) {
             if (!(obj instanceof Map)) {
@@ -81,9 +75,8 @@ public class SortController {
             return ((Comparable<Object>) value1).compareTo(value2);
         };
 
-        ArrayList<Map<String, Object>> sortedList = sorter.sort(sortableList, comparator, descending);
-
-        return new ArrayList<>(sortedList);
+        SortResult<Map<String, Object>> sortResult = sorter.sort(sortableList, comparator, descending);
+        return new SortResult<>(new ArrayList<>(sortResult.getSortedData()), sortResult.getExecutionTime());
     }
 
     private static <T> Comparator<T> getComparator(List<T> data) {

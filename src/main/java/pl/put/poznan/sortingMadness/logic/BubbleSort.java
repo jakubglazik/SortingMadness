@@ -21,7 +21,8 @@ public class BubbleSort implements SortingInterface{
         this.name = name;
     }
 
-    public <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+    public <T> SortResult<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+        long startTime = System.nanoTime();
         int n = data.size();
         for (int i = 0; i < n - 1; i++) {
             for (int j = 0; j < n - i - 1; j++) {
@@ -33,6 +34,7 @@ public class BubbleSort implements SortingInterface{
                 }
             }
         }
-        return data;
-    }
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        return new SortResult<>(data, duration);    }
 }

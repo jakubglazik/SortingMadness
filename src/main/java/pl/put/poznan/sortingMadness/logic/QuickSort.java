@@ -21,9 +21,14 @@ public class QuickSort implements SortingInterface {
     }
 
     @Override
-    public <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
-        quickSort(data, 0, data.size() - 1, comparator,descOrder);
-        return data;
+    public <T> SortResult<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+        long startTime = System.nanoTime();
+        quickSort(data, 0, data.size() - 1, comparator, descOrder);
+        long endTime = System.nanoTime();
+
+        long duration = endTime - startTime;
+
+        return new SortResult<>(data, duration);
     }
 
     private <T> void quickSort(ArrayList<T> data, int low, int high,Comparator<? super T> comperator ,boolean descOrder) {

@@ -1,7 +1,7 @@
 package pl.put.poznan.sortingMadness.logic;
+
 import java.util.ArrayList;
 import java.util.Comparator;
-
 
 public class MergeSort implements SortingInterface {
     private String name;
@@ -21,22 +21,28 @@ public class MergeSort implements SortingInterface {
     }
 
     @Override
-    public <T> ArrayList<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
-        if (data.size() <= 1) {
-            return data;
+    public <T> SortResult<T> sort(ArrayList<T> data, Comparator<? super T> comparator, boolean descOrder) {
+        long startTime = System.nanoTime();
+
+
+        if (data.size() > 1) {
+            int mid = data.size() / 2;
+            ArrayList<T> left = new ArrayList<>(data.subList(0, mid));
+            ArrayList<T> right = new ArrayList<>(data.subList(mid, data.size()));
+
+            sort(left, comparator, descOrder);
+            sort(right, comparator, descOrder);
+
+            merge(data, left, right, comparator, descOrder);
         }
 
-        int mid = data.size() / 2;
-        ArrayList<T> left = new ArrayList<>(data.subList(0, mid));
-        ArrayList<T> right = new ArrayList<>(data.subList(mid, data.size()));
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
 
-        sort(left,comparator, descOrder);
-        sort(right,comparator, descOrder);
-
-        return merge(data, left, right,comparator, descOrder);
+        return new SortResult<>(data, duration);
     }
 
-    private <T> ArrayList<T> merge(ArrayList<T> data, ArrayList<T> left, ArrayList<T> right, Comparator<? super T> comparator, boolean descOrder) {
+    private <T> void merge(ArrayList<T> data, ArrayList<T> left, ArrayList<T> right, Comparator<? super T> comparator, boolean descOrder) {
         int i = 0, j = 0, k = 0;
 
         while (i < left.size() && j < right.size()) {
@@ -55,7 +61,5 @@ public class MergeSort implements SortingInterface {
         while (j < right.size()) {
             data.set(k++, right.get(j++));
         }
-
-        return data;
     }
 }
