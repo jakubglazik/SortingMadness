@@ -6,10 +6,7 @@ import pl.put.poznan.sortingMadness.logic.SortingInterface;
 import pl.put.poznan.sortingMadness.logic.SortingStrategyFactory;
 import pl.put.poznan.sortingMadness.logic.SortResult;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/sort")
@@ -25,22 +22,36 @@ public class SortController {
 
     @SuppressWarnings("unchecked")
     @PostMapping
-    public SortResult<Object> sort(@RequestBody SortRequest request) {
+    public Map<String, SortResult<Object>> sort(@RequestBody SortRequest request) {
         List<Object> rawData = request.getData();
+        List<String> algorithmNames = request.getAlgorithmNames();
         boolean descending = request.isDescending();
         String fieldName = request.getFieldName();
 
         if (rawData.isEmpty()) {
-            return new SortResult<>(new ArrayList<>(), 0L);
+            throw new IllegalArgumentException("Data cannot be empty.");
         }
 
-        SortingInterface sorter = strategyFactory.getSorter(request.getAlgorithmName());
-
-        if (fieldName != null && !fieldName.isEmpty()) {
-            return sortByField(sorter, rawData, fieldName, descending);
-        } else {
-            return sortByValue(sorter, rawData, descending);
+        if (algorithmNames.isEmpty()) {
+            throw new IllegalArgumentException("Algorithm names cannot be empty.");
         }
+
+        Map<String, SortResult<Object>> results = new HashMap<>();
+
+        for (String algorithmName : algorithmNames) {
+            SortingInterface sorter = strategyFactory.getSorter(algorithmName);
+
+            SortResult<Object> result;
+            if (fieldName != null && !fieldName.isEmpty()) {
+                result = sortByField(sorter, rawData, fieldName, descending);
+            } else {
+                result = sortByValue(sorter, rawData, descending);
+            }
+
+            results.put(algorithmName, result);
+        }
+
+        return results;
     }
 
     private SortResult<Object> sortByValue(SortingInterface sorter, List<Object> rawData, boolean descending) {

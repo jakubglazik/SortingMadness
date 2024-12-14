@@ -4,7 +4,7 @@ import java.util.List;
 
 public class SortRequest {
     private List<Object> data; // Accepts raw objects
-    private String algorithmName;
+    private List<String> algorithmNames;
     private boolean descending;
     private String fieldName;
 
@@ -16,12 +16,12 @@ public class SortRequest {
         this.data = data;
     }
 
-    public String getAlgorithmName() {
-        return algorithmName;
+    public List<String> getAlgorithmNames() {
+        return algorithmNames;
     }
 
-    public void setAlgorithmName(String algorithmName) {
-        this.algorithmName = algorithmName;
+    public void setAlgorithmNames(List<String> algorithmNames) {
+        this.algorithmNames = algorithmNames;
     }
 
     public boolean isDescending() {
