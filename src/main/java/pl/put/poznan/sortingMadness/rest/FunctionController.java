@@ -5,10 +5,14 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/api/method")
 public class FunctionController {
+    private static final Logger logger = LoggerFactory.getLogger(SortController.class);
+
     private static <T> Comparator<T> getComparator(List<T> data) {
         if (data == null || data.isEmpty()) {
             throw new IllegalArgumentException("The data list is null or empty.");
@@ -75,6 +79,8 @@ public class FunctionController {
             response.put("result", result);
         } catch (Exception e) {
             // Log the error and prepare error response
+            logger.error("An error occurred: {}", e.getMessage(), e);
+
             Throwable cause = e.getCause();
             e.printStackTrace();
             response.put("status", "error");
