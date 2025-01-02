@@ -5,11 +5,23 @@ import java.util.Comparator;
 
 public class MergeSort implements SortingInterface {
     private String name;
-
+    private int iterationLimit;
+    private int currentIterations;
     public MergeSort() {
         this.name = "MergeSort";
+        this.iterationLimit = Integer.MAX_VALUE;
+        this.currentIterations = 0;
+
+    }
+    @Override
+    public void setIterationLimit(int iterationLimit) {
+        this.iterationLimit = iterationLimit;
     }
 
+    @Override
+    public int getIterationLimit() {
+        return this.iterationLimit;
+    }
     @Override
     public String getName() {
         return this.name;
@@ -46,20 +58,38 @@ public class MergeSort implements SortingInterface {
         int i = 0, j = 0, k = 0;
 
         while (i < left.size() && j < right.size()) {
+            if (currentIterations >= iterationLimit) {
+                while (i < left.size()) {
+                    data.set(k++, left.get(i++));
+                }
+                while (j < right.size()) {
+                    data.set(k++, right.get(j++));
+                }
+                return;
+            }
             int comparison = comparator.compare(left.get(i), right.get(j));
             if ((descOrder && comparison > 0) || (!descOrder && comparison <= 0)) {
                 data.set(k++, left.get(i++));
             } else {
                 data.set(k++, right.get(j++));
             }
+            currentIterations++;
         }
-
         while (i < left.size()) {
             data.set(k++, left.get(i++));
+            currentIterations++;
+            if (currentIterations >= iterationLimit) {
+                break;
+            }
         }
 
         while (j < right.size()) {
             data.set(k++, right.get(j++));
+            currentIterations++;
+            if (currentIterations >= iterationLimit) {
+                break;
+            }
         }
     }
 }
+

@@ -27,7 +27,7 @@ public class SortController {
         List<String> algorithmNames = request.getAlgorithmNames();
         boolean descending = request.isDescending();
         String fieldName = request.getFieldName();
-
+        int maxIterations = request.getIterationLimit();
         if (rawData.isEmpty()) {
             throw new IllegalArgumentException("Data cannot be empty.");
         }
@@ -40,7 +40,7 @@ public class SortController {
 
         for (String algorithmName : algorithmNames) {
             SortingInterface sorter = strategyFactory.getSorter(algorithmName);
-
+            sorter.setIterationLimit(maxIterations);
             SortResult<Object> result;
             if (fieldName != null && !fieldName.isEmpty()) {
                 result = sortByField(sorter, rawData, fieldName, descending);

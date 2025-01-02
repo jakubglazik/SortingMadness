@@ -15,6 +15,7 @@ public class SortRequest {
      */
     private List<Object> data;
 
+    private int iterationLimit=Integer.MAX_VALUE;
     /**
      * The list of algorithm names to be tested for sorting the given data.
      * Each algorithm name should correspond to an available sorting implementation.
@@ -105,5 +106,11 @@ public class SortRequest {
      */
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
+    }
+    public void setIterationLimit(int iterationLimit){
+        this.iterationLimit = iterationLimit;
+    }
+    public int getIterationLimit(){
+        return iterationLimit;
     }
 }

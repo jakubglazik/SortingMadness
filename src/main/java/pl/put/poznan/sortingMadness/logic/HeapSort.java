@@ -6,9 +6,21 @@ import java.util.Comparator;
 
 public class HeapSort implements SortingInterface {
     private String name;
-
+    private int iterationLimit;
+    private int currentIterations;
     public HeapSort() {
-        this.name = "HeapSort";
+        this.name = "HeapSort";this.iterationLimit = Integer.MAX_VALUE;
+        this.currentIterations = 0;
+
+    }
+    @Override
+    public void setIterationLimit(int iterationLimit) {
+        this.iterationLimit = iterationLimit;
+    }
+
+    @Override
+    public int getIterationLimit() {
+        return this.iterationLimit;
     }
 
     @Override
@@ -27,11 +39,17 @@ public class HeapSort implements SortingInterface {
 
         // Budowanie kopca
         for (int i = n / 2 - 1; i >= 0; i--) {
+            if (currentIterations >= iterationLimit) {
+                return createPartialResult(data, startTime);
+            }
             heapify(data, n, i, comparator, descOrder);
         }
 
         // Wyciąganie elementów z kopca
         for (int i = n - 1; i > 0; i--) {
+            if (currentIterations >= iterationLimit) {
+                return createPartialResult(data, startTime);
+            }
             swap(data, 0, i);
             heapify(data, i, 0, comparator, descOrder);
         }
@@ -61,6 +79,8 @@ public class HeapSort implements SortingInterface {
             swap(data, i, largestOrSmallest);
             heapify(data, n, largestOrSmallest, comparator, descOrder);
         }
+        currentIterations++;
+
     }
 
     private <T> boolean compare(T a, T b, Comparator<? super T> comparator, boolean descOrder) {
@@ -73,5 +93,10 @@ public class HeapSort implements SortingInterface {
         T temp = data.get(i);
         data.set(i, data.get(j));
         data.set(j, temp);
+    }
+    private <T> SortResult<T> createPartialResult(ArrayList<T> data, long startTime) {
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        return new SortResult<>(data, duration);
     }
 }

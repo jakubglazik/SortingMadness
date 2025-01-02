@@ -5,9 +5,21 @@ import java.util.Comparator;
 
 public class InsertionSort implements SortingInterface {
     private String name;
-
+    private int iterationLimit;
+    private int currentIterations;
     public InsertionSort() {
-        this.name = "InsertionSort";
+        this.name = "InsertionSort";this.iterationLimit = Integer.MAX_VALUE;
+        this.currentIterations = 0;
+
+    }
+    @Override
+    public void setIterationLimit(int iterationLimit) {
+        this.iterationLimit = iterationLimit;
+    }
+
+    @Override
+    public int getIterationLimit() {
+        return this.iterationLimit;
     }
 
     @Override
@@ -25,6 +37,9 @@ public class InsertionSort implements SortingInterface {
         long startTime = System.nanoTime();
         int n = data.size();
         for (int i = 1; i < n; i++) {
+            if (currentIterations >= iterationLimit) {
+                    break;
+                }
             T key = data.get(i);
             int j = i - 1;
 
@@ -37,6 +52,7 @@ public class InsertionSort implements SortingInterface {
                     break;
                 }
             }
+            currentIterations++;
             data.set(j + 1, key);
         }
         long endTime = System.nanoTime();

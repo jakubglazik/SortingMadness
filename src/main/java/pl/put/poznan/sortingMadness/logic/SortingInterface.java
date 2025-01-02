@@ -27,7 +27,19 @@ public interface SortingInterface {
      * @param name the name to be set for the sorting algorithm
      */
     void setName(String name);
+/**
+     * Sets the maximum iteration limit for the sorting algorithm.
+     *
+     * @param iterationLimit the maximum number of iterations allowed
+     */
+    void setIterationLimit(int iterationLimit);
 
+    /**
+     * Gets the maximum iteration limit for the sorting algorithm.
+     *
+     * @return the maximum number of iterations allowed
+     */
+    int getIterationLimit();
     /**
      * Sorts the given list of data using the specified comparator and order.
      * The method sorts the data either in ascending or descending order

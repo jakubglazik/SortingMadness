@@ -5,9 +5,21 @@ import java.util.Comparator;
 
 public class QuickSort implements SortingInterface {
     private String name;
-
+    private int iterationLimit;
+    private int currentIterations;
     public QuickSort() {
-        this.name = "QuickSort";
+        this.name = "QuickSort";this.iterationLimit = Integer.MAX_VALUE;
+        this.currentIterations = 0;
+
+    }
+    @Override
+    public void setIterationLimit(int iterationLimit) {
+        this.iterationLimit = iterationLimit;
+    }
+
+    @Override
+    public int getIterationLimit() {
+        return this.iterationLimit;
     }
 
     @Override
@@ -33,6 +45,11 @@ public class QuickSort implements SortingInterface {
 
     private <T> void quickSort(ArrayList<T> data, int low, int high,Comparator<? super T> comperator ,boolean descOrder) {
         if (low < high) {
+            if (currentIterations >= iterationLimit) {
+                return;
+            }
+
+            currentIterations++;
             int pivotIndex = partition(data, low, high, comperator ,descOrder);
             quickSort(data, low, pivotIndex - 1, comperator,descOrder);
             quickSort(data, pivotIndex + 1, high, comperator,descOrder);
@@ -44,11 +61,15 @@ public class QuickSort implements SortingInterface {
         int i = low - 1;
 
         for (int j = low; j < high; j++) {
+            if (currentIterations >= iterationLimit) {
+                return j;
+            }
             int comparison = comperator.compare(data.get(j), pivot);
             if ((descOrder && comparison > 0) || (!descOrder && comparison <= 0)) {
                 i++;
                 swap(data, i, j);
             }
+            currentIterations++;
         }
         swap(data, i + 1, high);
         return i + 1;

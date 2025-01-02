@@ -13,12 +13,24 @@ import java.util.Comparator;
  */
 public class SelectionSort implements SortingInterface {
     private String name;
-
+    private int iterationLimit;
+    private int currentIterations;
     /**
      * Default constructor that sets the name of the sorting algorithm to "SelectionSort".
      */
     public SelectionSort() {
-        this.name = "SelectionSort";
+        this.name = "SelectionSort";this.iterationLimit = Integer.MAX_VALUE;
+        this.currentIterations = 0;
+
+    }
+    @Override
+    public void setIterationLimit(int iterationLimit) {
+        this.iterationLimit = iterationLimit;
+    }
+
+    @Override
+    public int getIterationLimit() {
+        return this.iterationLimit;
     }
 
     /**
@@ -57,17 +69,22 @@ public class SelectionSort implements SortingInterface {
         long startTime = System.nanoTime();
         int n = data.size();
         for (int i = 0; i < n - 1; i++) {
+            if (currentIterations >= iterationLimit) {
+                    break;
+                }
             int selectedIdx = i;
             for (int j = i + 1; j < n; j++) {
                 int comparison = comparator.compare(data.get(j), data.get(selectedIdx));
                 if ((descOrder && comparison > 0) || (!descOrder && comparison < 0)) {
                     selectedIdx = j;
                 }
+                currentIterations++;
             }
             if (selectedIdx != i) {
                 T temp = data.get(selectedIdx);
                 data.set(selectedIdx, data.get(i));
                 data.set(i, temp);
+                currentIterations++;
             }
         }
         long endTime = System.nanoTime();
