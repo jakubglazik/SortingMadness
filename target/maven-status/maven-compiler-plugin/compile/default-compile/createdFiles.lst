@@ -1,0 +1,14 @@
+pl/put/poznan/sortingMadness/logic/QuickSort.class
+pl/put/poznan/sortingMadness/logic/SelectionSort.class
+pl/put/poznan/sortingMadness/logic/SortingInterface.class
+pl/put/poznan/sortingMadness/rest/SortRequest.class
+pl/put/poznan/sortingMadness/rest/FunctionController.class
+pl/put/poznan/sortingMadness/logic/SortingStrategyFactory.class
+pl/put/poznan/sortingMadness/logic/MergeSort.class
+pl/put/poznan/sortingMadness/logic/BubbleSort.class
+pl/put/poznan/sortingMadness/app/SortingMadness.class
+pl/put/poznan/sortingMadness/logic/HeapSort.class
+pl/put/poznan/sortingMadness/logic/SortResult.class
+pl/put/poznan/sortingMadness/rest/SortController.class
+pl/put/poznan/sortingMadness/logic/InsertionSort.class
+pl/put/poznan/sortingMadness/rest/FunctionRequest.class
