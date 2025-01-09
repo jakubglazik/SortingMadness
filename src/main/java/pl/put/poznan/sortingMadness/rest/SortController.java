@@ -32,9 +32,6 @@ public class SortController {
             throw new IllegalArgumentException("Data cannot be empty.");
         }
 
-//        if (algorithmNames.isEmpty()) {
-//            throw new IllegalArgumentException("Algorithm names cannot be empty.");
-//        }
         if (algorithmNames.isEmpty()) {
             algorithmNames = selectBestAlgorithms(rawData);
         }
